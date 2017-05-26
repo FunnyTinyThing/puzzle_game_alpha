@@ -1,6 +1,6 @@
-# {{ name }}
+# puzzle-game
 
-> {{ description }}
+> a vue project for (3x3,4x4,5x5)puzzle-game
 
 ## Build Setup
 
