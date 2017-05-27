@@ -33,7 +33,7 @@ ul {
       margin-left: -1px;
       cursor: pointer;
       color: #f00;
-      // background: url(../assets/ilove.jpg) no-repeat left top;
+      background: url(../assets/ilove.jpg) no-repeat left top;
       background-size: 600px 600px;
       &.active{
         background: #ccc;
@@ -58,7 +58,7 @@ ul {
 <template>
   <div class="app">
     <h1>{{ msg }}</h1>
-    <!--<img src="../assets/ilove.jpg" height="200" width="200" alt="" />-->
+    <img src="../assets/ilove.jpg" height="200" width="200" alt="" />
     <div class="game_num">
       <select v-model="puzzle_num" @change="initPulzz(puzzle_num)">
         <option value="3" checked>3 x 3</option>
@@ -68,7 +68,7 @@ ul {
     </div>
     <div class="game_box">
       <ul>
-        <li :class="{'active': puzzle == doub_num || puzzle == ''}" v-for="(puzzle,key) in puzzles" v-text="puzzle != doub_num ? puzzle : ''" @click="moveAction(puzzle,key)"></li>
+        <li class="little" :class="{'active': puzzle == doub_num || puzzle == ''}" v-for="(puzzle,key) in puzzles" v-text="puzzle != doub_num ? puzzle : ''" @click="moveAction(puzzle,key)"></li>
       </ul>
     </div>
     <div class="reset">
@@ -102,24 +102,42 @@ export default {
       this.hasSolve(this.puzzles);
     },
     moveAction (val,index){
+      let gameBoxs = document.querySelectorAll('.little');
       let leftNum = this.puzzles[index - 1],
           rightNum = this.puzzles[index + 1],
           topNum = this.puzzles[index - this.puzzle_num],
           bottomNum = this.puzzles[index + this.puzzle_num];
 
+      let str = '';
       // 判断上下左右数据交换位置
       if(leftNum === '' && index % this.puzzle_num){
         this.$set(this.puzzles,index - 1, val);
         this.$set(this.puzzles,index, '');
+
+        str = gameBoxs[index].style.backgroundPosition;
+        gameBoxs[index].style.backgroundPosition = gameBoxs[index-1].style.backgroundPosition;
+        gameBoxs[index-1].style.backgroundPosition = str;
       }else if(rightNum === '' && index  % this.puzzle_num !== this.puzzle_num - 1){
         this.$set(this.puzzles,index + 1, val);
         this.$set(this.puzzles,index, '');
+
+        str = gameBoxs[index].style.backgroundPosition;
+        gameBoxs[index].style.backgroundPosition = gameBoxs[index+1].style.backgroundPosition;
+        gameBoxs[index+1].style.backgroundPosition = str;
       }else if(topNum === ''){
         this.$set(this.puzzles,index - this.puzzle_num, val);
         this.$set(this.puzzles,index, '');
+
+        str = gameBoxs[index].style.backgroundPosition;
+        gameBoxs[index].style.backgroundPosition = gameBoxs[index-this.puzzle_num].style.backgroundPosition;
+        gameBoxs[index-this.puzzle_num].style.backgroundPosition = str;
       }else if(bottomNum === ''){
         this.$set(this.puzzles,index + this.puzzle_num, val);
         this.$set(this.puzzles,index, '');
+
+        str = gameBoxs[index].style.backgroundPosition;
+        gameBoxs[index].style.backgroundPosition = gameBoxs[index+this.puzzle_num].style.backgroundPosition;
+        gameBoxs[index+this.puzzle_num].style.backgroundPosition = str;
       }
       if(val){
         this.passFn();
@@ -155,25 +173,25 @@ export default {
       if(count % 2 == 0){
         // 将最后一个数置为空
         this.$nextTick( () => {
-          let gameBoxs = document.getElementsByTagName('li');
+          let gameBoxs = document.querySelectorAll('.little');
           let wh = 600 / this.puzzle_num;
           let len = this.puzzles.length;
 
           for(let i = 0; i < len; i++){
             let e = this.puzzles[i] - 1;
             gameBoxs[i].style.cssText =  'width: '+ wh +'px;height: '+ wh +'px;line-height:'+ wh +'px';
-
-            // if(e < this.puzzle_num){
-            //   gameBoxs[i].style.backgroundPosition = -e * wh +'px 0';
-            // }else if(e >= this.puzzle_num && e < this.puzzle_num * 2){
-            //   gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(1 * wh) +'px';
-            // }else if(e >= this.puzzle_num * 2 && e < this.puzzle_num * 3){
-            //   gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(2 * wh) +'px';
-            // }else if(e >= this.puzzle_num * 3 && e < this.puzzle_num * 4){
-            //   gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(3 * wh) +'px';
-            // }else if(e >= this.puzzle_num * 4 && e < this.puzzle_num * 5){
-            //   gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(4 * wh) +'px';
-            // }
+            
+            if(e < this.puzzle_num){
+              gameBoxs[i].style.backgroundPosition = -e * wh +'px 0';
+            }else if(e >= this.puzzle_num && e < this.puzzle_num * 2){
+              gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(1 * wh) +'px';
+            }else if(e >= this.puzzle_num * 2 && e < this.puzzle_num * 3){
+              gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(2 * wh) +'px';
+            }else if(e >= this.puzzle_num * 3 && e < this.puzzle_num * 4){
+              gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(3 * wh) +'px';
+            }else if(e >= this.puzzle_num * 4 && e < this.puzzle_num * 5){
+              gameBoxs[i].style.backgroundPosition = -(e % this.puzzle_num) * wh +'px '+ -(4 * wh) +'px';
+            }
             if((e + 1) === this.doub_num){
               this.puzzles[i] = '';
             }
