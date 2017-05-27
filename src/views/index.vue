@@ -113,26 +113,29 @@ export default {
       // 判断上下左右数据交换位置
       if(leftNum === '' && index % this.puzzle_num){
         this.$set(this.puzzles,index - 1, val);
+        this.$set(this.puzzles,index, '');
         
         gameBoxs[index].style.backgroundPosition = gameBoxs[index-1].style.backgroundPosition;
         gameBoxs[index-1].style.backgroundPosition = str;
       }else if(rightNum === '' && index  % this.puzzle_num !== this.puzzle_num - 1){
         this.$set(this.puzzles,index + 1, val);
+        this.$set(this.puzzles,index, '');
 
         gameBoxs[index].style.backgroundPosition = gameBoxs[index+1].style.backgroundPosition;
         gameBoxs[index+1].style.backgroundPosition = str;
       }else if(topNum === ''){
         this.$set(this.puzzles,index - this.puzzle_num, val);
+        this.$set(this.puzzles,index, '');
 
         gameBoxs[index].style.backgroundPosition = gameBoxs[index-this.puzzle_num].style.backgroundPosition;
         gameBoxs[index-this.puzzle_num].style.backgroundPosition = str;
       }else if(bottomNum === ''){
         this.$set(this.puzzles,index + this.puzzle_num, val);
+        this.$set(this.puzzles,index, '');
         
         gameBoxs[index].style.backgroundPosition = gameBoxs[index+this.puzzle_num].style.backgroundPosition;
         gameBoxs[index+this.puzzle_num].style.backgroundPosition = str;
       }
-      this.$set(this.puzzles,index, '');
       if(val){
         this.passFn();
       }
